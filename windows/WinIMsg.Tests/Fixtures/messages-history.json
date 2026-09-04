@@ -1,0 +1,44 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "messages": [
+      {
+        "id": 100,
+        "guid": "message-guid-100",
+        "chat_id": 42,
+        "chat_identifier": "iMessage;-;+15551234567",
+        "chat_guid": "iMessage;-;+15551234567",
+        "chat_name": "Alice",
+        "sender": "+15551234567",
+        "sender_name": "Alice",
+        "text": "hello",
+        "service": "iMessage",
+        "is_from_me": false,
+        "date": "2026-06-21T17:01:00Z",
+        "attachments": [
+          {
+            "filename": "photo.jpg",
+            "original_path": "/Users/testuser/Library/Messages/Attachments/photo.jpg",
+            "total_bytes": 1234,
+            "mime_type": "image/jpeg"
+          },
+          {
+            "filename": "voice.m4a",
+            "path": "/tmp/voice.m4a",
+            "byte_size": 4321,
+            "mime_type": "audio/mp4"
+          }
+        ],
+        "reactions": [
+          {
+            "type": "like",
+            "emoji": "👍",
+            "sender": "+15551234567",
+            "sender_name": "Alice"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "WinIMsg.App (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "WinIMsg.App (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

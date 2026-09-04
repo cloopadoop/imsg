@@ -1,0 +1,3 @@
+[submodule "imsg"]
+	path = imsg
+	url = https://github.com/openclaw/imsg.git

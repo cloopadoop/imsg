@@ -1,0 +1,11 @@
+{
+  "id": "win-imsg",
+  "name": "iMessage (win-imsg)",
+  "version": "1.0.0",
+  "license": "MIT",
+  "config": {
+    "serviceURL": "http://127.0.0.1:8321/",
+    "hasCustomUrl": true,
+    "hasNotificationSound": true
+  }
+}

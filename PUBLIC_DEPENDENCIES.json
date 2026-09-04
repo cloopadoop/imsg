@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "submodules": [
+    {
+      "path": "imsg",
+      "url": "https://github.com/openclaw/imsg.git",
+      "commit": "62fb6971e373cd80f0567ceb738ff003cd902c40"
+    }
+  ]
+}

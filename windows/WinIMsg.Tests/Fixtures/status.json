@@ -1,0 +1,27 @@
+{
+  "version": "0.11.1",
+  "bridge_version": 0,
+  "v2_ready": false,
+  "typing_indicators": false,
+  "read_receipts": false,
+  "advanced_features": false,
+  "basic_features": true,
+  "rpc_methods": [
+    "chats.list",
+    "messages.history",
+    "watch.subscribe",
+    "send",
+    "send.attachment",
+    "tapback",
+    "typing",
+    "read",
+    "message.edit",
+    "message.unsend",
+    "message.delete",
+    "message.send_status",
+    "group.rename",
+    "group.addParticipant",
+    "group.removeParticipant",
+    "group.leave"
+  ]
+}

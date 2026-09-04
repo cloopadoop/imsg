@@ -1,0 +1,19 @@
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "chats": [
+      {
+        "id": 42,
+        "identifier": "iMessage;-;+15551234567",
+        "guid": "iMessage;-;+15551234567",
+        "name": "",
+        "contact_name": "Alice",
+        "service": "iMessage",
+        "last_message_at": "2026-06-21T17:00:00Z",
+        "participants": ["+15551234567"],
+        "is_group": false
+      }
+    ]
+  }
+}

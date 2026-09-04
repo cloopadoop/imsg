@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<UserControl
+    x:Class="WinIMsg.App.Controls.MessageBubbleControl"
+    x:Name="Root"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid
+        HorizontalAlignment="Stretch"
+        Padding="0,4"
+        Visibility="{Binding Message.ItemVisibility, ElementName=Root}">
+        <Border
+            MaxWidth="640"
+            HorizontalAlignment="{Binding Message.BubbleAlignment, ElementName=Root}"
+            Padding="12"
+            Background="{Binding Message.BubbleBrush, ElementName=Root}"
+            CornerRadius="8">
+            <Border.ContextFlyout>
+                <MenuFlyout Opening="OnMessageFlyoutOpening">
+                    <MenuFlyoutItem
+                        x:Name="TapbackMenuItem"
+                        Click="OnTapbackClicked"
+                        Text="Tapback..." />
+                    <MenuFlyoutItem
+                        x:Name="ReplyMenuItem"
+                        Click="OnReplyClicked"
+                        Text="Reply" />
+                    <MenuFlyoutItem
+                        x:Name="EditMenuItem"
+                        Click="OnEditClicked"
+                        Text="Edit..." />
+                    <MenuFlyoutItem
+                        x:Name="UnsendMenuItem"
+                        Click="OnUnsendClicked"
+                        Text="Unsend" />
+                    <MenuFlyoutItem
+                        x:Name="NotifyAnywaysMenuItem"
+                        Click="OnNotifyAnywaysClicked"
+                        Text="Notify Anyway" />
+                    <MenuFlyoutItem
+                        x:Name="DeleteMenuItem"
+                        Click="OnDeleteClicked"
+                        Text="Delete" />
+                    <MenuFlyoutItem
+                        x:Name="RetrySendMenuItem"
+                        Click="OnRetrySendClicked"
+                        Text="Retry send" />
+                    <MenuFlyoutSeparator x:Name="AttachmentMenuSeparator" />
+                    <MenuFlyoutItem
+                        x:Name="OpenAttachmentMenuItem"
+                        Click="OnOpenAttachmentClicked"
+                        Text="Open externally" />
+                    <MenuFlyoutItem
+                        x:Name="DownloadAttachmentMenuItem"
+                        Click="OnDownloadAttachmentClicked"
+                        Text="Download attachment" />
+                    <MenuFlyoutItem
+                        x:Name="RevealAttachmentMenuItem"
+                        Click="OnRevealAttachmentClicked"
+                        Text="Show downloaded file" />
+                    <MenuFlyoutItem
+                        x:Name="RetryAttachmentDownloadMenuItem"
+                        Click="OnRetryAttachmentDownloadClicked"
+                        Text="Retry download" />
+                </MenuFlyout>
+            </Border.ContextFlyout>
+            <StackPanel Spacing="4">
+                <TextBlock
+                    Foreground="{Binding Message.SecondaryTextBrush, ElementName=Root}"
+                    Text="{Binding Message.Header, ElementName=Root}" />
+                <TextBlock
+                    FontFamily="Segoe UI Emoji, Segoe UI"
+                    Foreground="{Binding Message.PrimaryTextBrush, ElementName=Root}"
+                    Text="{Binding Message.Text, ElementName=Root}"
+                    TextWrapping="WrapWholeWords"
+                    Visibility="{Binding Message.TextVisibility, ElementName=Root}" />
+                <Border
+                    Padding="10,8"
+                    Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    CornerRadius="7"
+                    PointerEntered="OnInteractivePreviewPointerEntered"
+                    PointerExited="OnInteractivePreviewPointerExited"
+                    Tapped="OnLinkPreviewTapped"
+                    Visibility="{Binding Message.LinkPreviewVisibility, ElementName=Root}">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                        <Border
+                            Width="54"
+                            Height="54"
+                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                            CornerRadius="6"
+                            Visibility="{Binding Message.LinkPreview.PreviewImageVisibility, ElementName=Root}">
+                            <Image
+                                Source="{Binding Message.LinkPreview.PreviewImageSource, ElementName=Root}"
+                                Stretch="UniformToFill" />
+                        </Border>
+                        <FontIcon
+                            VerticalAlignment="Center"
+                            FontFamily="Segoe MDL2 Assets"
+                            FontSize="18"
+                            Glyph="&#xE774;"
+                            Visibility="{Binding Message.LinkPreview.FallbackIconVisibility, ElementName=Root}" />
+                        <StackPanel Grid.Column="1" Spacing="2">
+                            <TextBlock
+                                Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                                FontWeight="SemiBold"
+                                Text="{Binding Message.LinkPreview.Title, ElementName=Root}"
+                                TextTrimming="CharacterEllipsis" />
+                            <TextBlock
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Text="{Binding Message.LinkPreview.Subtitle, ElementName=Root}"
+                                TextTrimming="CharacterEllipsis" />
+                            <TextBlock
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                FontSize="12"
+                                Text="{Binding Message.LinkPreview.DisplayUrl, ElementName=Root}"
+                                TextTrimming="CharacterEllipsis" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+                <ItemsControl
+                    ItemsSource="{Binding Message.AttachmentPreviews, ElementName=Root}"
+                    Visibility="{Binding Message.AttachmentVisibility, ElementName=Root}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,4,0,0">
+                                <Border
+                                    MaxWidth="520"
+                                    HorizontalAlignment="Stretch"
+                                    CornerRadius="7"
+                                    PointerEntered="OnInteractivePreviewPointerEntered"
+                                    PointerExited="OnInteractivePreviewPointerExited"
+                                    Tapped="OnAttachmentTapped"
+                                    Visibility="{Binding ImageVisibility}">
+                                    <Image
+                                        MaxHeight="360"
+                                        Source="{Binding ImageSource}"
+                                        Stretch="Uniform" />
+                                </Border>
+
+                                <Border
+                                    MaxWidth="520"
+                                    HorizontalAlignment="Stretch"
+                                    CornerRadius="7"
+                                    PointerEntered="OnInteractivePreviewPointerEntered"
+                                    PointerExited="OnInteractivePreviewPointerExited"
+                                    Tapped="OnAttachmentTapped"
+                                    Visibility="{Binding MediaVisibility}">
+                                    <MediaPlayerElement
+                                        Height="{Binding MediaHeight}"
+                                        AreTransportControlsEnabled="True"
+                                        AutoPlay="False"
+                                        DataContextChanged="OnAttachmentMediaDataContextChanged"
+                                        Loaded="OnAttachmentMediaLoaded"
+                                        Unloaded="OnAttachmentMediaUnloaded" />
+                                </Border>
+
+                                <Border
+                                    MinWidth="230"
+                                    MaxWidth="320"
+                                    Padding="8,7"
+                                    Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="8"
+                                    Loaded="OnVoiceChipLoaded"
+                                    Unloaded="OnVoiceChipUnloaded"
+                                    Visibility="{Binding AudioVisibility}">
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                                        <Button
+                                            Width="36"
+                                            Height="36"
+                                            Padding="0"
+                                            VerticalAlignment="Center"
+                                            Click="OnVoicePlayClicked"
+                                            CornerRadius="18"
+                                            Style="{ThemeResource AccentButtonStyle}"
+                                            ToolTipService.ToolTip="Play voice message">
+                                            <FontIcon
+                                                x:Name="VoiceChipIcon"
+                                                FontFamily="Segoe MDL2 Assets"
+                                                FontSize="13"
+                                                Glyph="&#xE768;" />
+                                        </Button>
+                                        <StackPanel
+                                            Grid.Column="1"
+                                            VerticalAlignment="Center"
+                                            Spacing="4">
+                                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                                <TextBlock
+                                                    FontSize="13"
+                                                    Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                                                    Text="{Binding AudioTitle}"
+                                                    TextTrimming="CharacterEllipsis" />
+                                                <TextBlock
+                                                    x:Name="VoiceChipTimeText"
+                                                    Grid.Column="1"
+                                                    FontSize="12"
+                                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                            </Grid>
+                                            <ProgressBar
+                                                x:Name="VoiceChipProgress"
+                                                Height="3"
+                                                Maximum="1"
+                                                Value="0" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+
+                                <Border
+                                    Padding="10,8"
+                                    Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="7"
+                                    PointerEntered="OnInteractivePreviewPointerEntered"
+                                    PointerExited="OnInteractivePreviewPointerExited"
+                                    Tapped="OnAttachmentTapped"
+                                    Visibility="{Binding FileVisibility}">
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                        <FontIcon
+                                            VerticalAlignment="Center"
+                                            FontFamily="Segoe MDL2 Assets"
+                                            FontSize="16"
+                                            Glyph="&#xE8A5;" />
+                                        <StackPanel Grid.Column="1" Spacing="1">
+                                            <TextBlock
+                                                Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                                                Text="{Binding DisplayName}"
+                                                TextTrimming="CharacterEllipsis" />
+                                            <TextBlock
+                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                Text="{Binding DetailText}"
+                                                TextTrimming="CharacterEllipsis" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <TextBlock
+                    Foreground="{Binding Message.SecondaryTextBrush, ElementName=Root}"
+                    Text="{Binding Message.AttachmentUnavailableText, ElementName=Root}"
+                    TextWrapping="WrapWholeWords"
+                    Visibility="{Binding Message.AttachmentUnavailableVisibility, ElementName=Root}" />
+                <TextBlock
+                    FontFamily="Segoe UI Emoji, Segoe UI"
+                    Foreground="{Binding Message.SecondaryTextBrush, ElementName=Root}"
+                    Text="{Binding Message.ReactionSummary, ElementName=Root}"
+                    TextWrapping="WrapWholeWords"
+                    Visibility="{Binding Message.ReactionVisibility, ElementName=Root}" />
+                <ProgressBar
+                    Height="2"
+                    IsIndeterminate="True"
+                    Visibility="{Binding Message.DeliveryProgressVisibility, ElementName=Root}" />
+                <TextBlock
+                    Foreground="{Binding Message.SecondaryTextBrush, ElementName=Root}"
+                    Text="{Binding Message.DeliveryStatus, ElementName=Root}"
+                    TextWrapping="WrapWholeWords"
+                    Visibility="{Binding Message.DeliveryStatusVisibility, ElementName=Root}" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<UserControl
+    x:Class="WinIMsg.App.Controls.ComposeBar"
+    x:Name="Root"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Border
+        AllowDrop="True"
+        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+        BorderThickness="0,1,0,0"
+        DragOver="OnAttachmentDragOver"
+        Drop="OnAttachmentDrop"
+        Padding="14,10">
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto">
+            <Border
+                x:Name="VoiceRecordingBorder"
+                Margin="0,0,0,8"
+                Padding="8,5"
+                Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="7"
+                Visibility="Collapsed">
+                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+                    <Ellipse
+                        Width="9"
+                        Height="9"
+                        VerticalAlignment="Center"
+                        Fill="#E81123" />
+                    <TextBlock
+                        x:Name="VoiceRecordingTextBlock"
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        Text="Recording voice message"
+                        TextTrimming="CharacterEllipsis" />
+                    <Button
+                        Grid.Column="2"
+                        Click="OnVoiceCancelClicked"
+                        Style="{StaticResource ToolbarButton}"
+                        ToolTipService.ToolTip="Discard recording">
+                        <SymbolIcon Symbol="Cancel" />
+                    </Button>
+                </Grid>
+            </Border>
+            <Border
+                x:Name="ReplyTargetBorder"
+                Grid.Row="1"
+                Margin="0,0,0,8"
+                Padding="8,5"
+                Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="7"
+                Visibility="Collapsed">
+                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+                    <FontIcon
+                        VerticalAlignment="Center"
+                        FontFamily="Segoe MDL2 Assets"
+                        FontSize="14"
+                        Glyph="&#xE97A;" />
+                    <TextBlock
+                        x:Name="ReplyTargetTextBlock"
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        TextTrimming="CharacterEllipsis" />
+                    <Button
+                        Grid.Column="2"
+                        Click="OnReplyCancelClicked"
+                        Style="{StaticResource ToolbarButton}"
+                        ToolTipService.ToolTip="Cancel reply">
+                        <SymbolIcon Symbol="Cancel" />
+                    </Button>
+                </Grid>
+            </Border>
+            <ScrollViewer
+                x:Name="PendingAttachmentScrollViewer"
+                Grid.Row="2"
+                Margin="0,0,0,8"
+                HorizontalScrollBarVisibility="Auto"
+                HorizontalScrollMode="Auto"
+                VerticalScrollBarVisibility="Disabled"
+                VerticalScrollMode="Disabled"
+                Visibility="Collapsed">
+                <ItemsControl x:Name="PendingAttachmentList">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" Spacing="6" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ToolTipService.ToolTip="{Binding FilePath}">
+                                <Border
+                                    Width="136"
+                                    Height="104"
+                                    Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="8"
+                                    Visibility="{Binding ImagePreviewVisibility}">
+                                    <Grid>
+                                        <Image
+                                            Source="{Binding ImageSource}"
+                                            Stretch="UniformToFill" />
+                                        <Border
+                                            VerticalAlignment="Bottom"
+                                            Padding="6,3"
+                                            Background="#99000000">
+                                            <TextBlock
+                                                FontSize="12"
+                                                Foreground="White"
+                                                Text="{Binding DisplayName}"
+                                                TextTrimming="CharacterEllipsis" />
+                                        </Border>
+                                    </Grid>
+                                </Border>
+
+                                <Border
+                                    Width="152"
+                                    Height="104"
+                                    Background="Black"
+                                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="8"
+                                    Visibility="{Binding VideoPreviewVisibility}">
+                                    <Grid>
+                                        <MediaPlayerElement
+                                            AreTransportControlsEnabled="False"
+                                            AutoPlay="False"
+                                            DataContextChanged="OnPendingMediaDataContextChanged"
+                                            IsHitTestVisible="False"
+                                            Loaded="OnPendingMediaLoaded"
+                                            Stretch="UniformToFill"
+                                            Unloaded="OnPendingMediaUnloaded" />
+                                        <Border
+                                            Width="34"
+                                            Height="34"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Background="#AA000000"
+                                            CornerRadius="17">
+                                            <FontIcon
+                                                FontFamily="Segoe MDL2 Assets"
+                                                FontSize="16"
+                                                Foreground="White"
+                                                Glyph="&#xE768;" />
+                                        </Border>
+                                        <Border
+                                            VerticalAlignment="Bottom"
+                                            Padding="6,3"
+                                            Background="#99000000">
+                                            <TextBlock
+                                                FontSize="12"
+                                                Foreground="White"
+                                                Text="{Binding DisplayName}"
+                                                TextTrimming="CharacterEllipsis" />
+                                        </Border>
+                                    </Grid>
+                                </Border>
+
+                                <Border
+                                    MaxWidth="260"
+                                    Padding="8,4"
+                                    Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="8"
+                                    Visibility="{Binding FilePreviewVisibility}">
+                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="6">
+                                        <SymbolIcon
+                                            VerticalAlignment="Center"
+                                            Symbol="Attach" />
+                                        <StackPanel Grid.Column="1" Spacing="0">
+                                            <TextBlock
+                                                VerticalAlignment="Center"
+                                                Text="{Binding DisplayName}"
+                                                TextTrimming="CharacterEllipsis" />
+                                            <TextBlock
+                                                FontSize="12"
+                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                Text="{Binding KindText}"
+                                                TextTrimming="CharacterEllipsis" />
+                                        </StackPanel>
+                                        <Button
+                                            Grid.Column="2"
+                                            Click="OnRemovePendingAttachmentClicked"
+                                            Style="{StaticResource ToolbarButton}"
+                                            Tag="{Binding}"
+                                            ToolTipService.ToolTip="Remove attachment">
+                                            <SymbolIcon Symbol="Cancel" />
+                                        </Button>
+                                    </Grid>
+                                </Border>
+
+                                <Grid
+                                    Width="136"
+                                    Height="104"
+                                    Visibility="{Binding AudioPreviewVisibility}">
+                                    <Border
+                                        Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="8">
+                                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" Padding="10">
+                                            <FontIcon
+                                                VerticalAlignment="Center"
+                                                FontFamily="Segoe MDL2 Assets"
+                                                FontSize="22"
+                                                Glyph="&#xE720;" />
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+                                                <TextBlock
+                                                    Text="{Binding DisplayName}"
+                                                    TextTrimming="CharacterEllipsis" />
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                    Text="Audio"
+                                                    TextTrimming="CharacterEllipsis" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                                <Button
+                                    Width="28"
+                                    Height="28"
+                                    Margin="0,4,4,0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    Click="OnRemovePendingAttachmentClicked"
+                                    Style="{StaticResource ToolbarButton}"
+                                    Tag="{Binding}"
+                                    ToolTipService.ToolTip="Remove attachment"
+                                    Visibility="{Binding MediaRemoveButtonVisibility}">
+                                    <SymbolIcon Symbol="Cancel" />
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            <Grid
+                Grid.Row="3"
+                ColumnDefinitions="Auto,*,Auto,Auto,Auto,Auto"
+                ColumnSpacing="8">
+                <Button
+                    x:Name="AttachButton"
+                    Click="OnAttachClicked"
+                    Style="{StaticResource ToolbarButton}"
+                    ToolTipService.ToolTip="Attach file">
+                    <SymbolIcon Symbol="Attach" />
+                </Button>
+                <TextBox
+                    x:Name="ComposeBox"
+                    Grid.Column="1"
+                    AcceptsReturn="False"
+                    AllowDrop="True"
+                    DragOver="OnAttachmentDragOver"
+                    Drop="OnAttachmentDrop"
+                    MaxHeight="96"
+                    PlaceholderText="Message" />
+                <Button
+                    x:Name="EmojiButton"
+                    Grid.Column="2"
+                    Click="OnEmojiClicked"
+                    Style="{StaticResource ToolbarButton}"
+                    ToolTipService.ToolTip="Emoji">
+                    <TextBlock Text="😀" />
+                </Button>
+                <Button
+                    x:Name="ComposeOptionsButton"
+                    Grid.Column="3"
+                    Style="{StaticResource ToolbarButton}"
+                    ToolTipService.ToolTip="Compose options">
+                    <SymbolIcon Symbol="More" />
+                    <Button.Flyout>
+                        <MenuFlyout>
+                            <MenuFlyoutSubItem
+                                x:Name="RichTextMenuItem"
+                                IsEnabled="False"
+                                Text="Format selected text - requires send.rich">
+                                <MenuFlyoutItem
+                                    Click="OnTextFormattingClicked"
+                                    Tag="bold"
+                                    Text="Bold" />
+                                <MenuFlyoutItem
+                                    Click="OnTextFormattingClicked"
+                                    Tag="italic"
+                                    Text="Italic" />
+                                <MenuFlyoutItem
+                                    Click="OnTextFormattingClicked"
+                                    Tag="underline"
+                                    Text="Underline" />
+                                <MenuFlyoutItem
+                                    Click="OnTextFormattingClicked"
+                                    Tag="strikethrough"
+                                    Text="Strikethrough" />
+                            </MenuFlyoutSubItem>
+                            <MenuFlyoutSubItem
+                                x:Name="SendEffectMenuItem"
+                                IsEnabled="False"
+                                Text="Send effect - requires send.rich">
+                                <MenuFlyoutItem
+                                    Click="OnSendEffectClicked"
+                                    Tag="impact"
+                                    Text="Impact" />
+                                <MenuFlyoutItem
+                                    Click="OnSendEffectClicked"
+                                    Tag="invisibleink"
+                                    Text="Invisible ink" />
+                                <MenuFlyoutItem
+                                    Click="OnSendEffectClicked"
+                                    Tag="confetti"
+                                    Text="Confetti" />
+                                <MenuFlyoutItem
+                                    Click="OnSendEffectClicked"
+                                    Tag="lasers"
+                                    Text="Lasers" />
+                                <MenuFlyoutItem
+                                    Click="OnSendEffectClicked"
+                                    Tag="celebration"
+                                    Text="Celebration" />
+                            </MenuFlyoutSubItem>
+                            <MenuFlyoutItem
+                                x:Name="PollMenuItem"
+                                Click="OnPollClicked"
+                                IsEnabled="False"
+                                Text="Poll - poll.send not wired" />
+                            <MenuFlyoutItem
+                                x:Name="ReplyTargetMenuItem"
+                                IsEnabled="False"
+                                Text="Reply target - reply_to not wired" />
+                        </MenuFlyout>
+                    </Button.Flyout>
+                </Button>
+                <Button
+                    x:Name="VoiceButton"
+                    Grid.Column="4"
+                    Click="OnVoiceClicked"
+                    Style="{StaticResource ToolbarButton}"
+                    ToolTipService.ToolTip="Record voice message">
+                    <FontIcon
+                        x:Name="VoiceButtonIcon"
+                        FontFamily="Segoe MDL2 Assets"
+                        Glyph="&#xE720;" />
+                </Button>
+                <Button
+                    x:Name="SendButton"
+                    Grid.Column="5"
+                    Click="OnSendClicked"
+                    Style="{StaticResource ToolbarButton}"
+                    ToolTipService.ToolTip="Send">
+                    <SymbolIcon Symbol="Send" />
+                </Button>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>
